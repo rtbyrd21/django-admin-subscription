@@ -58,6 +58,8 @@ TEMPLATE_DIRS = (
    '/Users/byrd/Desktop/python/django-rob/templates',
 )
 
+MEDIA_ROOT = '/Users/byrd/Desktop/python/django-rob/static'
+
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 

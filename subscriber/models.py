@@ -1,5 +1,13 @@
 from django.db import models
+#from time import time
+
+
 # Create your models here.
+
+REGION_CHOICES = (
+    ('D', 'Domestic'),
+    ('I', 'International')
+)
 
 class Source(models.Model):
     source = models.CharField(max_length=100)
@@ -20,7 +28,8 @@ class Subscriber(models.Model):
     city = models.CharField(max_length=200)
     state_province = models.CharField(max_length=2, null=True, blank=True)
     zip = models.CharField(max_length=25)
-    international = models.BooleanField(default=False)
+    #is_international = models.BooleanField(default=False, help_text="hello")
+    region = models.CharField(max_length=1, choices=REGION_CHOICES)
     source = models.ForeignKey(Source)
     role = models.ForeignKey(Role)
 
