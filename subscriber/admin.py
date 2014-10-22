@@ -1,14 +1,47 @@
 from django.contrib import admin
 from subscriber.models import Subscriber
 from subscriber.models import Issue
+from subscriber.models import Annual
 from subscriber.models import Order
-from subscriber.models import Source
-from subscriber.models import Role
+from subscriber.models import Article
 
-admin.site.register(Subscriber)
+
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('name', 'region', 'source', 'role')
+    search_fields = ['name']
+
+class AnnualAdmin(admin.ModelAdmin):
+    list_display = ('id', 'issue_1', 'issue_2', 'issue_3')
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'get_name', 'get_yearly', 'get_single', 'get_article')
+
+    def get_name(self, obj):
+        return obj.subscriber.name
+    get_name.short_description = 'Name'
+    get_name.admin_order_field = 'subscriber__name'
+
+    def get_yearly(self, obj):
+        return obj.yearly.id
+    get_yearly.short_description = 'Annual Id'
+    get_yearly.admin_order_field = 'annual__id'
+
+    def get_single(self, obj):
+        return obj.single.Volume
+    get_single.short_description = 'Individual Issues'
+    get_single.admin_order_field = 'single__id'
+
+    def get_article(self, obj):
+        return obj.article.title
+    get_article.short_description = 'Article Title'
+    get_single.admin_order_field = 'article__title'
+
+
+
+admin.site.register(Subscriber, SubscriberAdmin)
 admin.site.register(Issue)
-admin.site.register(Order)
-admin.site.register(Source)
-admin.site.register(Role)
+admin.site.register(Annual, AnnualAdmin)
+admin.site.register(Article)
+admin.site.register(Order, OrderAdmin)
 
 # Register your models here.
