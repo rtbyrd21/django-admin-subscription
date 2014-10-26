@@ -5,5 +5,6 @@ urlpatterns = patterns('',
     url(r'^all/$', 'subscriber.views.subscribers'),
     url(r'^get/(?P<subscriber_id>\d+)/$', 'subscriber.views.subscriber'),
     url(r'^orders/$', 'subscriber.views.orders'),
+    url(r'^products/$', 'subscriber.views.products'),
 
 )

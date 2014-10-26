@@ -4,14 +4,18 @@ from subscriber.models import Issue
 from subscriber.models import Annual
 from subscriber.models import Order
 from subscriber.models import Article
+from subscriber.models import Address
+from subscriber.models import Catalog
+from subscriber.models import Annual_Issue
+from subscriber.models import Order_Lines
 
 
 class SubscriberAdmin(admin.ModelAdmin):
-    list_display = ('name', 'region', 'source', 'role')
+    list_display = ('name', 'source', 'role')
     search_fields = ['name']
 
 class AnnualAdmin(admin.ModelAdmin):
-    list_display = ('id', 'issue_1', 'issue_2', 'issue_3')
+    list_display = ('id',)
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'get_name', 'get_yearly', 'get_single', 'get_article')
@@ -40,8 +44,12 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Subscriber, SubscriberAdmin)
 admin.site.register(Issue)
+admin.site.register(Address)
+admin.site.register(Catalog)
 admin.site.register(Annual, AnnualAdmin)
+admin.site.register(Annual_Issue)
 admin.site.register(Article)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(Order_Lines)
 
 # Register your models here.
