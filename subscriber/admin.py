@@ -18,7 +18,7 @@ class AnnualAdmin(admin.ModelAdmin):
     list_display = ('id',)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_name', 'get_yearly', 'get_single', 'get_article')
+    list_display = ('id',)
 
     def get_name(self, obj):
         return obj.subscriber.name

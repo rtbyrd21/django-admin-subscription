@@ -15,8 +15,9 @@ def subscriber(request, subscriber_id=1):
 
 def orders(request):
     return render_to_response('order.html',
-                             {'order': Order.objects.all()})
+                             {'orders': Order.objects.all()})
 
 def products(request):
     return render_to_response('products.html',
                              {'catalogs': Catalog.objects.all()})
+

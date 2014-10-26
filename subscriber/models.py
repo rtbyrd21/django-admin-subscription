@@ -60,6 +60,10 @@ class Subscriber(models.Model):
     address = models.ForeignKey(Address, related_name='addresses')
     source = models.CharField(max_length=1, choices=SOURCE_CHOICES)
     role = models.CharField(max_length=1, choices=ROLE_CHOICES)
+
+    class Meta:
+        unique_together = ('name', 'address')
+
     def __unicode__(self):
         return self.name
 
@@ -109,10 +113,9 @@ class Order_Lines(models.Model):
 
 class Order(models.Model):
     subscriber = models.ForeignKey(Subscriber)
-    order_lines = models.ForeignKey(Order_Lines)
+    order_lines = models.ForeignKey(Order_Lines, related_name='items_ordered')
 
-    def __unicode__(self):
-        return self.subscriber
+
 
 
 
