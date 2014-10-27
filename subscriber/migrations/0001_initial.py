@@ -32,8 +32,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('year_id', models.IntegerField(max_length=4)),
-                ('start_date', models.CharField(max_length=6)),
-                ('end_date', models.CharField(max_length=6)),
+                ('start_date', models.CharField(max_length=10)),
+                ('end_date', models.CharField(max_length=10)),
             ],
             options={
             },
@@ -88,24 +88,10 @@ class Migration(migrations.Migration):
             name='Order',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('annuals', models.ForeignKey(related_name=b'annuals_ordered', to='subscriber.Catalog')),
-                ('issues', models.ForeignKey(related_name=b'issues_ordered', to='subscriber.Catalog')),
-                ('items', models.ForeignKey(related_name=b'items_ordered', to='subscriber.Catalog')),
+                ('annuals', models.ForeignKey(related_name=b'annuals_ordered', blank=True, to='subscriber.Annual', null=True)),
+                ('articles', models.ForeignKey(related_name=b'items_ordered', blank=True, to='subscriber.Article', null=True)),
+                ('issues', models.ForeignKey(related_name=b'issues_ordered', blank=True, to='subscriber.Issue', null=True)),
                 ('user', models.ForeignKey(related_name=b'who_ordered', to=settings.AUTH_USER_MODEL)),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
-            name='Order_Lines',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('order_line_1', models.CharField(max_length=200)),
-                ('order_line_2', models.CharField(max_length=200)),
-                ('order_line_3', models.CharField(max_length=200)),
-                ('order_line_4', models.CharField(max_length=200)),
-                ('order_line_5', models.CharField(max_length=200)),
             ],
             options={
             },
@@ -157,7 +143,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='article',
             name='catalog',
-            field=models.ForeignKey(related_name=b'article_products', to='subscriber.Catalog'),
+            field=models.ForeignKey(related_name=b'article_products', blank=True, to='subscriber.Catalog', null=True),
             preserve_default=True,
         ),
         migrations.AddField(

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 #from time import time
 
@@ -102,7 +101,7 @@ class Annual_Issue(models.Model):
     annual_id = models.ForeignKey(Annual, related_name='annual_ids')
     issue_id = models.ForeignKey(Issue, related_name='issues')
     def __unicode__(self):
-        return self.annual_id
+        return unicode(self.annual_id)
 
 
 
@@ -135,10 +134,5 @@ class Order(models.Model):
   #  articles = models.ForeignKey(Catalog, related_name='items_ordered', blank=True, null=True)
 
 
-
-
-
-
-#class Invoice(models.Model)_
 
 

@@ -14,7 +14,7 @@ class OrderListForm(forms.ModelForm):
     articles = forms.ModelChoiceField(queryset=Catalog.objects.get().article_products.all())
     issues = forms.ModelChoiceField(queryset=Catalog.objects.get().issue_products.all())
     annuals = forms.ModelChoiceField(queryset=Catalog.objects.get().annual_products.all())
-
+    #
     # annuals = forms.ModelChoiceField(queryset=Annual.objects.all())
     # issues = forms.ModelChoiceField(queryset=Issue.objects.all())
     # articles = forms.ModelChoiceField(queryset=Article.objects.all())

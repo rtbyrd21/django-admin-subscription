@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-from django.http import HttpResponseRedirect
 from django.views import generic
 
 from braces import views
