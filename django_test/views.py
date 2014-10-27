@@ -27,6 +27,12 @@ class SignUpView(
     model = User
     template_name = 'accounts/signup.html'
 
+    # def form_valid(self, form):
+    #     resp = super(SignUpView, self).form_valid(self, form)
+    #     TalkList.objects.create(user=self.object)
+    #     return resp
+
+
 
 class LoginView(
     views.AnonymousRequiredMixin,

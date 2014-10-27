@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 #from time import time
 
 
@@ -23,6 +26,22 @@ ROLE_CHOICES = (
     ('I', 'Individual'),
     ('N', 'Institution'),
 )
+
+
+class Order_List(models.Model):
+    user = models.ForeignKey(User, related_name='orders')
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+
+    class Meta:
+        unique_together = ('user', 'name')
+
+    def __unicode__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Order_List, self).save(*args, **kwargs)
 
 
 class Role(models.Model):
@@ -72,13 +91,12 @@ class Subscriber(models.Model):
 class Annual(models.Model):
     catalog = models.ForeignKey(Catalog, related_name='annual_products')
     year_id = models.IntegerField(max_length=4)
-    start_date = models.CharField(max_length=6)
-    end_date = models.CharField(max_length=6)
+    start_date = models.CharField(max_length=10)
+    end_date = models.CharField(max_length=10)
     def __unicode__(self):
         return unicode(self.year_id)
 
-    #def __unicode__(self):
-    #    return unicode(self.id)
+
 
 class Annual_Issue(models.Model):
     annual_id = models.ForeignKey(Annual, related_name='annual_ids')
@@ -89,7 +107,7 @@ class Annual_Issue(models.Model):
 
 
 class Article(models.Model):
-    catalog = models.ForeignKey(Catalog, related_name='article_products')
+    catalog = models.ForeignKey(Catalog, related_name='article_products', blank=True, null=True)
     title = models.CharField(max_length=200)
     abstract = models.TextField(max_length=1000, blank=True)
     full_text = models.TextField(blank=True)
@@ -100,21 +118,21 @@ class Article(models.Model):
         return self.title
 
 
-class Order_Lines(models.Model):
-    order_line_1 = models.CharField(max_length=200)
-    order_line_2 = models.CharField(max_length=200)
-    order_line_3 = models.CharField(max_length=200)
-    order_line_4 = models.CharField(max_length=200)
-    order_line_5 = models.CharField(max_length=200)
-
-    def __unicode__(self):
-        return self.order_line_1
-
 
 class Order(models.Model):
-    subscriber = models.ForeignKey(Subscriber)
-    order_lines = models.ForeignKey(Order_Lines, related_name='items_ordered')
+    user = models.ForeignKey(User, related_name='who_ordered')
+   # annuals = models.CharField(max_length=200, blank=True, null=True)
+   # issues = models.CharField(max_length=200, blank=True, null=True)
+   # articles = models.CharField(max_length=200, blank=True, null=True)
 
+    annuals = models.ForeignKey(Annual, related_name='annuals_ordered', blank=True, null=True)
+    issues = models.ForeignKey(Issue, related_name='issues_ordered', blank=True, null=True)
+    articles = models.ForeignKey(Article, related_name='items_ordered', blank=True, null=True)
+
+
+  #  annuals = models.ForeignKey(Catalog, related_name='annuals_ordered', blank=True, null=True)
+  #  issues = models.ForeignKey(Catalog, related_name='issues_ordered', blank=True, null=True)
+  #  articles = models.ForeignKey(Catalog, related_name='items_ordered', blank=True, null=True)
 
 
 

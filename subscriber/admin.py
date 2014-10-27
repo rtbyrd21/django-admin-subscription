@@ -7,7 +7,7 @@ from subscriber.models import Article
 from subscriber.models import Address
 from subscriber.models import Catalog
 from subscriber.models import Annual_Issue
-from subscriber.models import Order_Lines
+from subscriber.models import Order_List
 
 
 class SubscriberAdmin(admin.ModelAdmin):
@@ -50,6 +50,6 @@ admin.site.register(Annual, AnnualAdmin)
 admin.site.register(Annual_Issue)
 admin.site.register(Article)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Order_Lines)
+admin.site.register(Order_List)
 
 # Register your models here.
