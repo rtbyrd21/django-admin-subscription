@@ -67,7 +67,8 @@ class Migration(migrations.Migration):
             name='Catalog',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('products', models.CharField(max_length=200)),
+                ('annuals', models.ManyToManyField(related_name=b'annual_products', null=True, to='subscriber.Annual', blank=True)),
+                ('articles', models.ManyToManyField(related_name=b'annual_articles', max_length=200, null=True, to='subscriber.Article', blank=True)),
             ],
             options={
             },
@@ -78,7 +79,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('Volume', models.DecimalField(max_digits=3, decimal_places=1)),
-                ('catalog', models.ForeignKey(related_name=b'issue_products', to='subscriber.Catalog')),
             ],
             options={
             },
@@ -88,9 +88,7 @@ class Migration(migrations.Migration):
             name='Order',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('annuals', models.ForeignKey(related_name=b'annuals_ordered', blank=True, to='subscriber.Annual', null=True)),
-                ('articles', models.ForeignKey(related_name=b'items_ordered', blank=True, to='subscriber.Article', null=True)),
-                ('issues', models.ForeignKey(related_name=b'issues_ordered', blank=True, to='subscriber.Issue', null=True)),
+                ('select', models.ForeignKey(related_name=b'annuals_ordered', blank=True, to='subscriber.Catalog', null=True)),
                 ('user', models.ForeignKey(related_name=b'who_ordered', to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -141,21 +139,15 @@ class Migration(migrations.Migration):
             unique_together=set([('user', 'name')]),
         ),
         migrations.AddField(
-            model_name='article',
-            name='catalog',
-            field=models.ForeignKey(related_name=b'article_products', blank=True, to='subscriber.Catalog', null=True),
+            model_name='catalog',
+            name='issues',
+            field=models.ManyToManyField(related_name=b'annual_issues', null=True, to='subscriber.Issue', blank=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='annual_issue',
             name='issue_id',
             field=models.ForeignKey(related_name=b'issues', to='subscriber.Issue'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='annual',
-            name='catalog',
-            field=models.ForeignKey(related_name=b'annual_products', to='subscriber.Catalog'),
             preserve_default=True,
         ),
     ]

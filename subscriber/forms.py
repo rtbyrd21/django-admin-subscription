@@ -11,9 +11,9 @@ from . import models
 class OrderListForm(forms.ModelForm):
 
 
-    articles = forms.ModelChoiceField(queryset=Catalog.objects.get().article_products.all())
-    issues = forms.ModelChoiceField(queryset=Catalog.objects.get().issue_products.all())
-    annuals = forms.ModelChoiceField(queryset=Catalog.objects.get().annual_products.all())
+    # articles = forms.ModelChoiceField(queryset=Catalog.objects.get().article_products.all())
+    # issues = forms.ModelChoiceField(queryset=Catalog.objects.get().issue_products.all())
+    # annuals = forms.ModelChoiceField(queryset=Catalog.objects.get().annual_products.all())
     #
     # annuals = forms.ModelChoiceField(queryset=Annual.objects.all())
     # issues = forms.ModelChoiceField(queryset=Issue.objects.all())
@@ -22,9 +22,10 @@ class OrderListForm(forms.ModelForm):
 
     class Meta:
         fields = (
-                    'annuals',
-                    'issues',
-                    'articles',)
+                    #'annuals',
+                    #'issues',
+                    #'articles',
+                     )
         model = models.Order
 
 

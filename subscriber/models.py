@@ -49,14 +49,10 @@ class Role(models.Model):
     def __unicode__(self):
         return self.role
 
-class Catalog(models.Model):
-    products = models.CharField(max_length=200)
 
-    def __unicode__(self):
-        return self.products
 
 class Issue(models.Model):
-    catalog = models.ForeignKey(Catalog, related_name='issue_products')
+    #catalog = models.ForeignKey(Catalog, related_name='issue_products')
     Volume = models.DecimalField(max_digits=3, decimal_places=1)
 
     def __unicode__(self):
@@ -88,12 +84,14 @@ class Subscriber(models.Model):
 
 
 class Annual(models.Model):
-    catalog = models.ForeignKey(Catalog, related_name='annual_products')
+    #catalog = models.ForeignKey(Catalog, related_name='annual_products')
     year_id = models.IntegerField(max_length=4)
     start_date = models.CharField(max_length=10)
     end_date = models.CharField(max_length=10)
     def __unicode__(self):
         return unicode(self.year_id)
+
+
 
 
 
@@ -106,7 +104,7 @@ class Annual_Issue(models.Model):
 
 
 class Article(models.Model):
-    catalog = models.ForeignKey(Catalog, related_name='article_products', blank=True, null=True)
+    #catalog = models.ForeignKey(Catalog, related_name='article_products', blank=True, null=True)
     title = models.CharField(max_length=200)
     abstract = models.TextField(max_length=1000, blank=True)
     full_text = models.TextField(blank=True)
@@ -114,9 +112,14 @@ class Article(models.Model):
     ebsco_link = models.CharField(max_length=200, blank=True, null=True)
 
     def __unicode__(self):
-        return self.title
+        return unicode(self.title)
 
-
+class Catalog(models.Model):
+    annuals = models.ManyToManyField(Annual, related_name='annual_products', blank=True, null=True)
+    issues = models.ManyToManyField(Issue, related_name='annual_issues', blank=True, null=True)
+    articles = models.ManyToManyField(Article, related_name='annual_articles', max_length=200, blank=True, null=True)
+    def __unicode__(self):
+        return unicode(self.id)
 
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='who_ordered')
@@ -124,9 +127,11 @@ class Order(models.Model):
    # issues = models.CharField(max_length=200, blank=True, null=True)
    # articles = models.CharField(max_length=200, blank=True, null=True)
 
-    annuals = models.ForeignKey(Annual, related_name='annuals_ordered', blank=True, null=True)
-    issues = models.ForeignKey(Issue, related_name='issues_ordered', blank=True, null=True)
-    articles = models.ForeignKey(Article, related_name='items_ordered', blank=True, null=True)
+    select = models.ForeignKey(Catalog, related_name='annuals_ordered', blank=True, null=True)
+
+
+    def __unicode__(self):
+        return unicode(self.user)
 
 
   #  annuals = models.ForeignKey(Catalog, related_name='annuals_ordered', blank=True, null=True)
