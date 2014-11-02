@@ -15,16 +15,17 @@ class OrderListForm(forms.ModelForm):
     # issues = forms.ModelChoiceField(queryset=Catalog.objects.get().issue_products.all())
     # annuals = forms.ModelChoiceField(queryset=Catalog.objects.get().annual_products.all())
     #
-    # annuals = forms.ModelChoiceField(queryset=Annual.objects.all())
-    # issues = forms.ModelChoiceField(queryset=Issue.objects.all())
-    # articles = forms.ModelChoiceField(queryset=Article.objects.all())
+    annuals = forms.ModelMultipleChoiceField(queryset=Catalog.objects.filter(price=30))
+    issues = forms.ModelMultipleChoiceField(queryset=Catalog.objects.filter(price=10))
+    articles = forms.ModelMultipleChoiceField(queryset=Catalog.objects.filter(price=5))
 
 
     class Meta:
         fields = (
-                    #'annuals',
-                    #'issues',
-                    #'articles',
+                    'annuals',
+                    'issues',
+                    'articles',
+                    # 'select',
                      )
         model = models.Order
 
@@ -37,6 +38,7 @@ class OrderListForm(forms.ModelForm):
                     'annuals',
                     'issues',
                     'articles',
+                    # 'select',
             ButtonHolder(
                 Submit('create', 'Create')
 

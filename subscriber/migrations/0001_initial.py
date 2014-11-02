@@ -34,6 +34,7 @@ class Migration(migrations.Migration):
                 ('year_id', models.IntegerField(max_length=4)),
                 ('start_date', models.CharField(max_length=10)),
                 ('end_date', models.CharField(max_length=10)),
+                ('date', models.DateTimeField(auto_now_add=True)),
             ],
             options={
             },
@@ -43,6 +44,7 @@ class Migration(migrations.Migration):
             name='Annual_Issue',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
                 ('annual_id', models.ForeignKey(related_name=b'annual_ids', to='subscriber.Annual')),
             ],
             options={
@@ -58,6 +60,7 @@ class Migration(migrations.Migration):
                 ('full_text', models.TextField(blank=True)),
                 ('proquest_link', models.CharField(max_length=200, null=True, blank=True)),
                 ('ebsco_link', models.CharField(max_length=200, null=True, blank=True)),
+                ('date', models.DateTimeField(auto_now_add=True)),
             ],
             options={
             },
@@ -67,8 +70,8 @@ class Migration(migrations.Migration):
             name='Catalog',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('annuals', models.ManyToManyField(related_name=b'annual_products', null=True, to='subscriber.Annual', blank=True)),
-                ('articles', models.ManyToManyField(related_name=b'annual_articles', max_length=200, null=True, to='subscriber.Article', blank=True)),
+                ('name', models.CharField(max_length=100)),
+                ('price', models.IntegerField()),
             ],
             options={
             },
@@ -78,7 +81,9 @@ class Migration(migrations.Migration):
             name='Issue',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('Volume', models.DecimalField(max_digits=3, decimal_places=1)),
+                ('issue_number', models.DecimalField(max_digits=3, decimal_places=1)),
+                ('date', models.DateTimeField(auto_now_add=True)),
+                ('catalog', models.OneToOneField(related_name=b'issue_products', null=True, blank=True, to='subscriber.Catalog')),
             ],
             options={
             },
@@ -88,7 +93,8 @@ class Migration(migrations.Migration):
             name='Order',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('select', models.ForeignKey(related_name=b'annuals_ordered', blank=True, to='subscriber.Catalog', null=True)),
+                ('slug', models.SlugField(max_length=255)),
+                ('select', models.ManyToManyField(related_name=b'annuals_ordered', null=True, to='subscriber.Catalog', blank=True)),
                 ('user', models.ForeignKey(related_name=b'who_ordered', to=settings.AUTH_USER_MODEL)),
             ],
             options={
@@ -139,15 +145,21 @@ class Migration(migrations.Migration):
             unique_together=set([('user', 'name')]),
         ),
         migrations.AddField(
-            model_name='catalog',
-            name='issues',
-            field=models.ManyToManyField(related_name=b'annual_issues', null=True, to='subscriber.Issue', blank=True),
+            model_name='article',
+            name='catalog',
+            field=models.OneToOneField(related_name=b'article_products', null=True, blank=True, to='subscriber.Catalog'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='annual_issue',
             name='issue_id',
             field=models.ForeignKey(related_name=b'issues', to='subscriber.Issue'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='annual',
+            name='catalog',
+            field=models.OneToOneField(related_name=b'annual_products', null=True, blank=True, to='subscriber.Catalog'),
             preserve_default=True,
         ),
     ]

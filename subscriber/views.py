@@ -1,12 +1,13 @@
 from __future__ import absolute_import
 
 from django.views import generic
-
+from django.db.models import Count
 from braces import views
 
 from . import models
 from . import forms
 from django.shortcuts import render_to_response
+from django.contrib.auth.models import User
 from subscriber.models import Subscriber
 from subscriber.models import Order
 from subscriber.models import Catalog
@@ -25,11 +26,13 @@ class OrderListListView(
     RestrictToUserMixin,
     generic.ListView
 ):
-    model = Order_List
+    model = Order
     template_name = 'orderlist.html'
 
-    # def get_queryset(self):
-    #     return self.request.user.orders.all()
+    def get_queryset(self):
+        queryset = super(OrderListListView, self).get_queryset()
+        queryset = queryset.annotate(order_count=Count('select'))
+        return queryset
 
 
 class OrderListDetailView(
@@ -61,6 +64,16 @@ class OrderListCreateView(
         return super(OrderListCreateView, self).form_valid(form)
 
 
+class TalkListScheduleView(
+    views.PrefetchRelatedMixin,
+    generic.ListView
+):
+    model = Order
+    prefetch_related = ('user',)
+    template_name = 'mailing.html'
+
+
+
 
 
 
@@ -81,3 +94,6 @@ def products(request):
     return render_to_response('products.html',
                              {'catalogs': Catalog.objects.all()})
 
+def reverse(request):
+    return  render_to_response('reverse.html',
+                             {'bart': User.objects.filter(order__select='2')})
